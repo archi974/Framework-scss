@@ -1,0 +1,22 @@
+html{
+    margin: 1% 2%;
+    background-color: rgba(90, 7, 21, 0.918);
+}
+h1{
+    color: #fff;
+    text-align: center;
+    text-decoration:underline;
+}
+h2{
+    background-color: #ddd;
+}
+h3, small, label{
+    color: #fff;
+    text-decoration:underline;
+}
+div{
+    justify-content: center;
+}
+p{
+    margin: 0;
+}

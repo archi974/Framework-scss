@@ -1,0 +1,429 @@
+/* BODY */
+.container-fluid {
+    margin: 0 auto;
+    max-width: 1800px;
+    width: 100%;
+  }
+.container{
+    margin: 0 auto;
+    max-width: 1200px;
+    padding: var(--bs-gutter-x,.75rem);
+}
+
+%clearfix{
+    display: block;
+    clear: both;
+}
+
+/* GRID */
+
+$grid__bp-sm: 576;
+$grid__bp-md: 768;
+$grid__bp-lg: 1024;
+$grid__bp-xl: 1800;
+$grid__cols: 12;
+$gap: 0.25;
+
+
+.col{
+    grid-row: row;
+    flex-grow: 1;
+    flex-direction: left;
+    margin: $gap * 1%;
+    float : left;
+}
+
+$map-grid-props: (
+
+    "": 0,
+    "-sm": $grid__bp-sm,
+    "-md": $grid__bp-md,
+    "-lg": $grid__bp-lg,
+    "-xl": $grid__bp-xl,
+
+);
+
+@mixin create-mq($breakpoint, $min-or-max){
+    @if($breakpoint == 0){
+        @content;
+    } @else {
+        @media screen and (#{$min-or-max}-width:  $breakpoint *1px){
+            @content;
+        }
+    }
+}
+
+@mixin create-col-classes($modifier, $grid-cols, $breakpoint){
+    @include create-mq($breakpoint, "min"){
+        @for $i from 1 through $grid-cols{
+            $margin: 100 / ($grid-cols / $i);
+            .col#{$modifier}-#{$i}-#{$grid__cols}{
+                flex-basis: ($margin - ($gap * 2 )) * 1%;
+                margin: $gap * 1%;
+            }
+        }
+    }
+}
+
+@each $modifier, $breakpoint in $map-grid-props {
+    @if ($modifier == "") {
+        $modifier: "-xs";
+    }
+    @include create-mq ($breakpoint - 1, "max"){
+        .hidden#{$modifier}-down{
+            display: none !important;
+        }
+    }
+    @include create-mq ($breakpoint, "min"){
+        .hidden#{$modifier}-up{
+            display: none !important;
+        }
+    }
+}
+
+.row{
+    margin: $gap auto;
+    &   {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+    @each $modifier, $breakpoint in $map-grid-props{
+        @include create-col-classes($modifier, $grid__cols, $breakpoint);
+    }
+}
+
+.row.grid{
+    [class*="col-"]{
+        &.higher{
+            min-height: 60px;
+        }
+        min-height: 30px;
+        outline: 1px solid #c0c0c0;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        background-color: #fff;
+    }
+    .col {
+        min-height: 30px;
+        outline: 10px solid #1100ff;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }
+}
+
+/* BUTTON */
+
+$body: #333;
+$primaryFont: "Open Sans", sans-serif;
+$secondaryFont: "Roboto", sans-serif;
+$white: #fff;
+$primary: #007bff;
+$secondary: #6c757d;
+$success: #28a745;
+$danger: #dc3545;
+$warning: #ffc107;
+$info: #117a8b;
+$muted: #c0c0c0;
+$light: #dae0e5;
+$dark: #1d2124;
+
+$style-type: (
+    "primary": $primary,
+    "secondary": $secondary,
+    "success": $success,
+    "danger": $danger,
+    "warning": $warning,
+    "info": $info,
+    "muted": $muted,
+    "light": $light,
+    "dark": $dark,
+  );
+
+.btn{
+    border-radius: 5px;
+    border-style: solid;
+    padding: .5rem 1rem;
+    text-decoration: none;
+    outline: none;
+    margin-bottom: 0.25rem;
+    display: inline-block;
+}
+
+.btn-sm{
+    font-size: 0.65rem;
+}
+
+.btn-lg{
+    font-size: 1.25rem;
+}
+
+
+@each $type, $class in $style-type {
+    .btn-#{$type}{
+        background-color: $class;
+        color: $white;
+        border-color: $class;
+
+        &:hover,
+        &:focus{
+            background-color: darken($class, 15%);
+            border-color: darken($class, 15%);
+        }
+        &:active{
+            background-color: lighten($class, 15%);
+            border-color: lighten($class, 15%);
+        }
+        &:disabled{
+            background-color: #eee;
+            color: #000;
+            border-color: #eee;
+        }
+    }
+    @if($type == 'light'){
+        .btn-#{$type}{
+            background-color: $class;
+            color: $body;
+            border-color: $class;
+    
+            &:hover,
+            &:focus{
+                background-color: darken($class, 15%);
+                border-color: darken($class, 15%);
+            }
+            &:active{
+                background-color: lighten($class, 15%);
+                border-color: lighten($class, 15%);
+            }
+            &:disabled{
+                background-color: #eee;
+                color: #000;
+                border-color: #eee;
+            }
+        }
+    }@else if($type == 'dark'){
+        .btn-#{$type}{
+            background-color: $class;
+            color: $white;
+            border-color: $class;
+    
+            &:hover,
+            &:focus{
+                background-color: lighten($class, 15%);
+                border-color: lighten($class, 15%);
+            }
+            &:active{
+                background-color: lighten($class, 55%);
+                border-color: lighten($class, 55%);
+            }
+            &:disabled{
+                background-color: #eee;
+                color: #000;
+                border-color: #eee;
+            }
+        }
+    }
+}
+
+/* IMAGE */
+
+.img-responsive{
+    max-width: 100%;
+    height: auto;
+}
+
+.img-rounded{
+    border-radius: 20%;
+}
+
+.img-thumbnail{
+    max-width: calc(100% - 5.5rem);
+    padding: .25rem;
+}
+
+.img-circle{
+    border-radius: 50%;
+} 
+
+.img-blur{
+    filter: blur(3px);
+}
+
+.img-opacity{
+    opacity: 65%;
+    &:hover,
+    &:focus,
+    &:active{
+        opacity: 100%;
+    }
+}
+
+.img-rounded-top-left{
+    border-radius: 25% 0 0 0;
+}
+
+.img-rounded-bottom-left{
+    border-radius: 0 0 0 25%;
+}
+
+.img-rounded-top-right{
+    border-radius: 0 25% 0 0;
+}
+
+.img-rounded-bottom-right{
+    border-radius: 0 0 25% 0;
+}
+
+/* TEXT/COLOR */
+
+@each $type, $class in $style-type {
+    .text-#{$type} {
+        color: $class;
+        &:hover,
+        &:focus,
+        &:active{
+            color: lighten($class, 15%);
+        }
+    }@if ($type == "dark") {
+        .text-#{$type} {
+            color: $class;
+            &:hover,
+            &:focus,
+            &:active{
+                color: lighten($class, 65%);
+            }
+        }
+    }@else if ($type == "warning") {
+        .text-#{$type} {
+            color: $class;
+            &:hover,
+            &:focus,
+            &:active{
+                color: darken($class, 15%);
+            }
+        }
+    }@else if ($type == "light") {
+        .text-#{$type} {
+            color: $class;
+            &:hover,
+            &:focus,
+            &:active{
+                color: darken($class, 25%);
+            }
+        }
+    }
+}
+
+.text-center{ text-align: center; }
+.text-right{ text-align: right; }
+.text-justify{ text-align: justify; }
+
+/* TEXT/BACKGROUND COLOR */
+
+@each $type, $class in $style-type {
+    .bg-#{$type} {
+        color: #fff;
+        background-color: $class;
+        &:hover,
+        &:focus,
+        &:active{
+            background-color: darken($class, 15%);
+        }
+    }@if ($type == "dark") {
+        .bg-#{$type} {
+            color: #fff;
+            background-color: $class;
+            &:hover,
+            &:focus,
+            &:active{
+                background-color: lighten($class, 50%);
+            }
+        }
+    }@else if ($type == "warning") {
+        .bg-#{$type} {
+            color: #000;
+            background-color: $class;
+            &:hover,
+            &:focus,
+            &:active{
+                background-color: lighten($class, 85%);
+            }
+        }
+    }@else if ($type == "muted") {
+        .bg-#{$type} {
+            color: #000;
+            background-color: $class;
+            &:hover,
+            &:focus,
+            &:active{
+                background-color: lighten($class, 85%);
+            }
+        }
+    }@else if ($type == "light") {
+        .bg-#{$type} {
+            color: #000;
+            background-color: $class;
+            &:hover,
+            &:focus,
+            &:active{
+                background-color: darken($class, 20%);
+            }
+        }
+    }
+}
+
+/* ALERT */
+
+@each $type, $class in $style-type {
+    .alert-#{$type}{
+        background-color: $class;
+        color: rgba(255,255,255,1);
+        border: 2px solid darken($class, 15%);
+        border-radius: 5px;
+        margin: 1rem 0;
+        padding: 1rem;
+        opacity: 0.85;
+        & span {
+            font-weight: bold;
+        }
+    }
+    @if ($type == "warning") {
+        .alert-#{$type}{
+            color: $body;
+        }
+    }@else if ($type == "muted") {
+        .alert-#{$type}{
+            color: $body;
+        }
+    }@else if ($type == "light") {
+        .alert-#{$type}{
+            color: $body;
+        }
+    }
+    
+}
+
+/* HIDDEN ELEMENT */
+
+.hidden{
+    visibility: hidden;
+    margin: 0%;
+    padding: 0%;
+    width: 0%;
+    height: 0%;
+}
+@each $min-or-max, $breakpoint in $map-grid-props {
+    @if($breakpoint >= 576px){
+        @media screen and (min-width:  $breakpoint *1px){
+            .hidden#{$min-or-max}{
+                visibility: hidden;
+                margin: 0%;
+                padding: 0%;
+                width: 0%;
+                height: 0%;
+            }
+        }
+    }
+}
